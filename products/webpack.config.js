@@ -1,14 +1,23 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// This plugin actually helps us to embedded the js file with the HTML File automatically
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 
 module.exports = {
   mode: 'development',
   devServer: {
-    port: 8081, // We have created a dev Server on 8081 port
+    port: 8081,
   },
+
   plugins: [
+    new ModuleFederationPlugin({
+      name: 'products',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './ProductsIndex': './src/index',
+      },
+    }),
+
     new HtmlWebpackPlugin({
-      template: './public/index.html', // We need to give the location of our HTML FIle in which we will embedded the js file which is process or build by webpack
+      template: './public/index.html',
     }),
   ],
 };
